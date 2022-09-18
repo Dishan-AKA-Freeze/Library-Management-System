@@ -124,4 +124,71 @@ function convert_data($string, $action = 'encrypt')
 	return $output;
 }
 
+function get_one_day_fines($connect)
+{
+	$output = 0;
+	$query = "
+	SELECT library_one_day_fine FROM lms_setting 
+	LIMIT 1
+	";
+	$result = $connect->query($query);
+	foreach($result as $row)
+	{
+		$output = $row["library_one_day_fine"];
+	}
+	return $output;
+}
+
+function get_book_issue_limit_per_user($connect)
+{
+	$output = '';
+	$query = "
+	SELECT library_issue_total_book_per_user FROM lms_setting 
+	LIMIT 1
+	";
+	$result = $connect->query($query);
+	foreach($result as $row)
+	{
+		$output = $row["library_issue_total_book_per_user"];
+	}
+	return $output;
+}
+
+function get_total_book_issue_per_user($connect, $user_unique_id)
+{
+	$output = 0;
+
+	$query = "
+	SELECT COUNT(issue_book_id) AS Total FROM lms_issue_book 
+	WHERE user_id = '".$user_unique_id."' 
+	AND book_issue_status = 'Issue'
+	";
+
+	$result = $connect->query($query);
+
+	foreach($result as $row)
+	{
+		$output = $row["Total"];
+	}
+	return $output;
+}
+
+function get_total_book_issue_day($connect)
+{
+	$output = 0;
+
+	$query = "
+	SELECT library_total_book_issue_day FROM lms_setting 
+	LIMIT 1
+	";
+
+	$result = $connect->query($query);
+
+	foreach($result as $row)
+	{
+		$output = $row["library_total_book_issue_day"];
+	}
+	return $output;
+}
+
 ?>
